@@ -7,10 +7,12 @@
     "start": "vite",
     "dev": "vite",
     "build": "vite build",
+    "lint": "biome check --write --unsafe",
     "serve": "vite preview"
   },
   "license": "MIT",
   "devDependencies": {
+    "@biomejs/biome": "2.2.6",
     "@tailwindcss/vite": "^4.1.13",
     "solid-devtools": "^0.34.3",
     "tailwindcss": "^4.1.13",
