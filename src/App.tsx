@@ -1,4 +1,4 @@
-import type { Component } from "solid-js"
+import { type Component, For } from "solid-js"
 
 const App: Component = () => {
   let audioContext: AudioContext | null = null
@@ -214,19 +214,117 @@ const App: Component = () => {
   }
 
   return (
-    <div class="mt-20 flex items-center justify-center gap-4">
-      <button type="button" class="btn btn-primary" onClick={playKick}>
-        kick
-      </button>
-      <button type="button" class="btn btn-primary" onClick={playSnare}>
-        snare
-      </button>
-      <button type="button" class="btn btn-primary" onClick={playHihat}>
-        hihat
-      </button>
-      <button type="button" class="btn btn-primary" onClick={playGlitch}>
-        glitch
-      </button>
+    <div class="flex h-screen flex-col items-stretch justify-end gap-4 p-4">
+      <div class="flex items-center justify-center gap-2">
+        <button
+          type="button"
+          class="btn btn-primary btn-xl btn-square flex-grow"
+          onClick={playKick}
+        >
+          <svg
+            viewBox="0 0 32 32"
+            class="size-8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <title>kick drum</title>
+            <circle
+              cx="16"
+              cy="16"
+              r="14"
+              fill="none"
+              stroke="currentColor"
+              stroke-width={2}
+            />
+            <circle cx="16" cy="16" r="4" fill="currentColor" />
+          </svg>
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary btn-xl btn-square flex-grow"
+          onClick={playSnare}
+        >
+          <svg
+            viewBox="0 0 32 32"
+            class="size-8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <title>snare drum</title>
+            <g fill="none" transform="rotate(45 16 16)">
+              <rect
+                x="6"
+                y="6"
+                width="20"
+                height="20"
+                fill="none"
+                stroke="currentColor"
+                stroke-width={2}
+                stroke-linejoin="round"
+              />
+              <rect x="11" y="11" width="4" height="4" fill="currentColor" />
+              <rect x="17" y="11" width="4" height="4" fill="currentColor" />
+              <rect x="11" y="17" width="4" height="4" fill="currentColor" />
+              <rect x="17" y="17" width="4" height="4" fill="currentColor" />
+            </g>
+          </svg>
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary btn-xl btn-square flex-grow"
+          onClick={playHihat}
+        >
+          <svg
+            viewBox="0 0 32 32"
+            class="size-8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <title>hihat</title>
+            <polygon
+              points="16,4 28,22 4,22"
+              fill="none"
+              stroke="currentColor"
+              stroke-width={2}
+            />
+            <polygon
+              points="16,10 28,28 4,28"
+              fill="none"
+              stroke="currentColor"
+              stroke-width={2}
+            />
+            <polygon points="16,10 24,22 8,22" fill="currentColor" />
+          </svg>
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary btn-xl btn-square flex-grow"
+          onClick={playGlitch}
+        >
+          <svg
+            viewBox="0 0 32 32"
+            class="size-8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <title>glitch</title>
+            <polyline
+              points="2,16 8,10 14,22 20,10 26,22 30,16"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </button>
+      </div>
+
+      <div class="mx-auto grid w-auto grid-cols-8 grid-rows-2 gap-2">
+        <For each={Array.from({ length: 16 })}>
+          {(item, index) => (
+            <button type="button" class="btn btn-outline">
+              {`${index() + 1}`}
+            </button>
+          )}
+        </For>
+      </div>
     </div>
   )
 }
