@@ -9,16 +9,29 @@ interface DrumPadProps {
 }
 
 export function DrumPad(props: DrumPadProps) {
-  const handleTouch = (e: MouseEvent | TouchEvent) => {
+  let touchStarted = false
+
+  const handleTouchStart = (e: TouchEvent) => {
+    e.preventDefault()
+    touchStarted = true
+    props.playFunc(props.audioContext)
+    // Reset flag after a short delay to allow mouse events on desktop
+    setTimeout(() => { touchStarted = false }, 300)
+  }
+
+  const handleMouseDown = (e: MouseEvent) => {
+    if (touchStarted) return
     e.preventDefault()
     props.playFunc(props.audioContext)
   }
+
   return (
     <button
       type="button"
       data-instrument-id={props.instrumentId}
       class="btn btn-primary btn-square h-20 flex-grow select-none"
-      onMouseDown={handleTouch}
+      onTouchStart={handleTouchStart}
+      onMouseDown={handleMouseDown}
     >
       {props.icon}
     </button>
