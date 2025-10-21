@@ -18,7 +18,6 @@ export function DrumPad(props: DrumPadProps) {
       type="button"
       data-instrument-id={props.instrumentId}
       class="btn btn-primary btn-square h-20 flex-grow select-none"
-      onTouchStart={handleTouch}
       onMouseDown={handleTouch}
     >
       {props.icon}
