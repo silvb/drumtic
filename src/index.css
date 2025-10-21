@@ -2,3 +2,10 @@
 @plugin "daisyui" {
   themes: wireframe --default;
 }
+
+html, body {
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}

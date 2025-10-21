@@ -13,7 +13,7 @@ import { playSnare } from "./utils/play-snare"
 const App: Component = () => {
   const audioContext: AudioContext | null = null
 
-  onMount(() => {
+  const setAudioSession = () => {
     // Set audio session to playback mode for iOS silent mode compatibility
     try {
       // biome-ignore lint/suspicious/noExplicitAny: experimental API, only works in Mac/iOS Safari
@@ -23,6 +23,24 @@ const App: Component = () => {
       }
     } catch (error) {
       console.warn("AudioSession API not available:", error)
+    }
+  }
+
+  onMount(() => {
+    setAudioSession()
+
+    // Re-enable audio session when page becomes visible again
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        setAudioSession()
+      }
+    }
+
+    document.addEventListener("visibilitychange", handleVisibilityChange)
+
+    // Cleanup event listener on component unmount
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange)
     }
   })
 
