@@ -4,8 +4,5 @@
 }
 
 html, body {
-  touch-action: manipulation;
-  user-select: none;
-  -webkit-user-select: none;
-  -webkit-touch-callout: none;
+  @apply touch-manipulation select-none;
 }
