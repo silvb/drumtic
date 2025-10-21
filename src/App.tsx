@@ -11,7 +11,14 @@ import { playKick } from "./utils/play-kick"
 import { playSnare } from "./utils/play-snare"
 
 const App: Component = () => {
-  const audioContext: AudioContext | null = null
+  let audioContext: AudioContext | null = null
+
+  const getAudioContext = () => {
+    if (!audioContext) {
+      audioContext = new AudioContext()
+    }
+    return audioContext
+  }
 
   const setAudioSession = () => {
     // Set audio session to playback mode for iOS silent mode compatibility
@@ -48,19 +55,19 @@ const App: Component = () => {
   window.addEventListener("keydown", e => {
     switch (e.key) {
       case "a": {
-        playKick(audioContext)
+        playKick(getAudioContext())
         break
       }
       case "s": {
-        playSnare(audioContext)
+        playSnare(getAudioContext())
         break
       }
       case "u": {
-        playHihat(audioContext)
+        playHihat(getAudioContext())
         break
       }
       case "l": {
-        playGlitch(audioContext)
+        playGlitch(getAudioContext())
         break
       }
     }
@@ -72,25 +79,25 @@ const App: Component = () => {
         <DrumPad
           instrumentId="kick"
           playFunc={playKick}
-          audioContext={audioContext}
+          audioContext={getAudioContext()}
           icon={<KickIcon />}
         />
         <DrumPad
           instrumentId="snare"
           playFunc={playSnare}
-          audioContext={audioContext}
+          audioContext={getAudioContext()}
           icon={<SnareIcon />}
         />
         <DrumPad
           instrumentId="hihat"
           playFunc={playHihat}
-          audioContext={audioContext}
+          audioContext={getAudioContext()}
           icon={<HihatIcon />}
         />
         <DrumPad
           instrumentId="glitch"
           playFunc={playGlitch}
-          audioContext={audioContext}
+          audioContext={getAudioContext()}
           icon={<GlitchIcon />}
         />
       </div>

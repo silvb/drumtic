@@ -55,4 +55,5 @@ export const playSnare: PlayFunc = audioContext => {
   noiseGain.gain.exponentialRampToValueAtTime(0.01, now + decay)
 
   noise.start(now)
+  noise.stop(now + decay)
 }

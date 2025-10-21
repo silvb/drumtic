@@ -45,4 +45,5 @@ export const playHihat: PlayFunc = audioContext => {
   gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1)
 
   noise.start(now)
+  noise.stop(now + 0.1)
 }

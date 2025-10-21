@@ -65,4 +65,5 @@ export const playGlitch: PlayFunc = audioContext => {
   noiseGain.gain.setValueAtTime(0.3, now)
 
   noise.start(now)
+  noise.stop(now + 0.15)
 }
