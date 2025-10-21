@@ -25,7 +25,7 @@ export const playKick: PlayFunc = audioContext => {
   const modulator = audioContext.createOscillator()
   const modulatorGain = audioContext.createGain()
 
-  const saturation = createSaturation(audioContext, 0.5, 10)
+  const saturation = createSaturation(audioContext, 0.5, 7)
 
   // Connect nodes - modulator modulates carrier frequency
   modulator.connect(modulatorGain)

@@ -14,8 +14,10 @@ const App: Component = () => {
   let audioContext: AudioContext | null = null
 
   const getAudioContext = () => {
-    if (!audioContext) {
+    if (!audioContext || audioContext.state === "closed") {
       audioContext = new AudioContext()
+    } else if (audioContext.state === "suspended") {
+      audioContext.resume()
     }
     return audioContext
   }
@@ -36,10 +38,26 @@ const App: Component = () => {
   onMount(() => {
     setAudioSession()
 
-    // Re-enable audio session when page becomes visible again
+    // Handle audio session when page visibility changes
     const handleVisibilityChange = () => {
       if (!document.hidden) {
         setAudioSession()
+      } else {
+        // Suspend audio context when page becomes hidden to prevent background audio
+        if (audioContext && audioContext.state !== "closed") {
+          audioContext.suspend()
+        }
+
+        // Reset audio session on iOS when hidden
+        try {
+          // biome-ignore lint/suspicious/noExplicitAny: experimental API, only works in Mac/iOS Safari
+          if ("audioSession" in navigator && (navigator as any).audioSession) {
+            // biome-ignore lint/suspicious/noExplicitAny: experimental API, only works in Mac/iOS Safari
+            ;(navigator as any).audioSession.type = "ambient"
+          }
+        } catch (error) {
+          console.warn("AudioSession API not available:", error)
+        }
       }
     }
 
@@ -62,11 +80,11 @@ const App: Component = () => {
         playSnare(getAudioContext())
         break
       }
-      case "u": {
+      case "h": {
         playHihat(getAudioContext())
         break
       }
-      case "h": {
+      case "j": {
         playGlitch(getAudioContext())
         break
       }

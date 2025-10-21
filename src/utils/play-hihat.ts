@@ -53,7 +53,7 @@ export const playHihat: PlayFunc = audioContext => {
       bitCrusher.oversample = "none"
 
       // Phase offset for carrier pairs (out of phase beating)
-      const phaseOffset = carrierIndex * Math.PI * 0.3
+      const _phaseOffset = carrierIndex * Math.PI * 0.3
 
       // Enhanced pitch wobble for tape flutter (±5-15 cents per oscillator)
       const wobbleCents = -15 + Math.random() * 30

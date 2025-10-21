@@ -61,7 +61,7 @@ export const playGlitch: PlayFunc = audioContext => {
     const operatorGain = audioContext.createGain()
 
     // High-frequency carriers (3-8kHz range)
-    const baseFreq = 3000 + i * 800 + pitchVariation * 5 // Reduced base freq and pitch variation impact
+    const baseFreq = 1200 + i * 800 + pitchVariation * 5 // Reduced base freq and pitch variation impact
     const pitchFactor = 2 ** (pitchVariation / 1200)
     const carrierFreq = Math.min(baseFreq * pitchFactor, 8000) // Cap carrier at 8kHz
     const modFreq = Math.min(carrierFreq * op.ratio, 20000) // Cap modulator at 20kHz (below Nyquist)
@@ -102,18 +102,20 @@ export const playGlitch: PlayFunc = audioContext => {
       now + 0.05 * lengthVariation,
     )
 
+    const decay = i * 0.02
+
     // Sharp FM envelope
     const opLength = (0.02 + Math.random() * 0.08) * lengthVariation
-    operatorGain.gain.setValueAtTime(0.33, now + i * 0.002) // Slight time offset
+    operatorGain.gain.setValueAtTime(0.33, now + decay) // Slight time offset
     operatorGain.gain.exponentialRampToValueAtTime(
       0.001,
-      now + i * 0.002 + opLength,
+      now + decay + opLength,
     )
 
-    carrier.start(now + i * 0.002)
-    carrier.stop(now + i * 0.002 + opLength)
-    modulator.start(now + i * 0.002)
-    modulator.stop(now + i * 0.002 + opLength)
+    carrier.start(now + decay)
+    carrier.stop(now + decay + opLength)
+    modulator.start(now + decay)
+    modulator.stop(now + decay + opLength)
   })
 
   // 9-bit bitcrusher for FM layer (YM2612 DAC emulation)
@@ -167,7 +169,7 @@ export const playGlitch: PlayFunc = audioContext => {
   const noiseGain = audioContext.createGain()
   noiseGain.gain.setValueAtTime(0.3 * ampVariation, now)
 
-  const noiseLength = (0.03 + Math.random() * 0.03) * lengthVariation
+  const noiseLength = (3.03 + Math.random() * 0.03) * lengthVariation
   const noiseBuffer = audioContext.createBuffer(
     1,
     audioContext.sampleRate * noiseLength,

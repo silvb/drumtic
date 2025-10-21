@@ -6,7 +6,7 @@ export const playSnare: PlayFunc = audioContext => {
     audioContext = new AudioContext()
   }
 
-  const decay = 0.15
+  const _decay = 0.15
   const bodyDecay = 0.12
 
   const now = audioContext.currentTime
@@ -17,7 +17,7 @@ export const playSnare: PlayFunc = audioContext => {
   const modulatorGain = audioContext.createGain()
   const bodyGain = audioContext.createGain()
 
-  const saturation = createSaturation(audioContext, 0.5, 10)
+  const saturation = createSaturation(audioContext, 0.6, 8)
   // Connect FM synthesis chain
   modulator.connect(modulatorGain)
   modulatorGain.connect(carrier.frequency)

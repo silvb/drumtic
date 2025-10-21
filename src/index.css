@@ -3,6 +3,7 @@
   themes: wireframe --default;
 }
 
-html, body {
+html,
+body {
   @apply touch-manipulation select-none;
 }
