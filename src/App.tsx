@@ -66,7 +66,7 @@ const App: Component = () => {
         playHihat(getAudioContext())
         break
       }
-      case "l": {
+      case "h": {
         playGlitch(getAudioContext())
         break
       }
