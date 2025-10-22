@@ -121,6 +121,7 @@ export const ControlsInterface: Component = () => {
             <StepPad
               step={index() + 1}
               isActive={state.isPlaying && state.currentStep === index()}
+              hasPattern={state.pattern[state.activePad][index()]}
             />
           )}
         </For>

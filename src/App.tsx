@@ -15,6 +15,7 @@ interface AppState {
   audioContext: AudioContext | null
   currentStep: number
   startTime: number | null
+  pattern: Record<InstrumentId, boolean[]>
 }
 
 function createStateStore() {
@@ -24,6 +25,12 @@ function createStateStore() {
     audioContext: null,
     currentStep: 0,
     startTime: null,
+    pattern: {
+      kick: Array(16).fill(false),
+      snare: Array(16).fill(false),
+      hihat: Array(16).fill(false),
+      glitch: Array(16).fill(false),
+    },
   })
 
   const calculateCurrentStep = (
@@ -64,7 +71,11 @@ function createStateStore() {
     setState("activePad", instrumentId)
   }
 
-  createEffect((prev) => {
+  const toggleStep = (stepIndex: number) => {
+    setState("pattern", state.activePad, stepIndex, prev => !prev)
+  }
+
+  createEffect(prev => {
     const isPlaying = state.isPlaying
     if (prev !== undefined && prev !== isPlaying) {
       if (isPlaying) {
@@ -81,7 +92,13 @@ function createStateStore() {
     return isPlaying
   })
 
-  return { state, toggleIsPlaying, initializeAudioContext, selectInstrument }
+  return {
+    state,
+    toggleIsPlaying,
+    initializeAudioContext,
+    selectInstrument,
+    toggleStep,
+  }
 }
 
 export type AppContextType = ReturnType<typeof createStateStore>
