@@ -8,7 +8,9 @@
   },
   "tailwindCSS.experimental.classRegex": [
     ["clsx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"],
-    ["cva\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
+    ["cva\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"],
+    // SolidJS classList syntax: classList={{ ... }}
+    ["classList\\s*=\\s*{{([^}]*)}}", "(?:'|\"|`)([^'\"`]*)"]
   ],
   "files.associations": {
     "*.css": "tailwindcss"

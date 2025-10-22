@@ -10,7 +10,7 @@ import { SnareIcon } from "./snare-icon"
 import { StepPad } from "./step-pad"
 
 export const ControlsInterface: Component = () => {
-  const { state, toggleIsPlaying, playFunctions } = useAppState()
+  const { state, toggleIsPlaying, playFunctions, setBpm } = useAppState()
   const setAudioSession = () => {
     // Set audio session to playback mode for iOS silent mode compatibility
     try {
@@ -86,9 +86,22 @@ export const ControlsInterface: Component = () => {
   return (
     <div class="mx-auto flex h-screen max-w-md flex-col items-stretch justify-end gap-4 p-4">
       <div>
+        <input
+          type="number"
+          class="input input-primary input-xl border-2"
+          min="1"
+          max="400"
+          title="Beats per Minute"
+          value={state.bpm}
+          onChange={e => {
+            setBpm(parseFloat(e.target.value))
+          }}
+        />
+      </div>
+      <div>
         <button
           type="button"
-          class="btn btn-outline btn-xl border-2"
+          class="btn btn-secondary btn-xl"
           onClick={() => toggleIsPlaying()}
         >
           <Show when={state.isPlaying} fallback={<PlayIcon />}>

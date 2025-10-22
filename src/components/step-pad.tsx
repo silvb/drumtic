@@ -14,7 +14,7 @@ export function StepPad(props: StepPadProps) {
       type="button"
       class="btn btn-outline border-2"
       classList={{
-        "btn-primary": props.isActive,
+        "btn-accent outline-2 outline-black outline-offset-0": props.isActive,
         "btn-secondary": !props.isActive && props.hasPattern,
       }}
       onClick={() => {

@@ -20,6 +20,7 @@ interface AppState {
   currentStep: number
   startTime: number | null
   pattern: Record<InstrumentId, boolean[]>
+  bpm: number
 }
 
 const STORAGE_KEY = "drumtic-state"
@@ -53,6 +54,7 @@ const saveStateToStorage = (state: AppState) => {
     const toSave: PersistableState = {
       activePad: state.activePad,
       pattern: state.pattern,
+      bpm: state.bpm,
     }
     localStorage.setItem(STORAGE_KEY, JSON.stringify(toSave))
   } catch (error) {
@@ -73,6 +75,7 @@ function createStateStore() {
       hihat: Array(16).fill(false),
       glitch: Array(16).fill(false),
     },
+    bpm: 120,
   }
 
   const initialState = { ...defaultState, ...loadStateFromStorage() }
@@ -82,8 +85,7 @@ function createStateStore() {
     currentTime: number,
     startTime: number,
   ): number => {
-    const bpm = 120
-    const stepDurationMs = (60 / bpm / 4) * 1000 // 16th notes at 120 BPM
+    const stepDurationMs = (60 / state.bpm / 4) * 1000 // 16th notes at 120 BPM
     const elapsedMs = currentTime - startTime
     return Math.floor(elapsedMs / stepDurationMs) % 16
   }
@@ -118,6 +120,10 @@ function createStateStore() {
 
   const toggleStep = (stepIndex: number) => {
     setState("pattern", state.activePad, stepIndex, prev => !prev)
+  }
+
+  const setBpm = (bpm: number) => {
+    setState("bpm", Math.min(400, Math.max(1, bpm)))
   }
 
   const createManagedPlayFunction = (
@@ -179,6 +185,7 @@ function createStateStore() {
     selectInstrument,
     toggleStep,
     playFunctions,
+    setBpm,
   }
 }
 
