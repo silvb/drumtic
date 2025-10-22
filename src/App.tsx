@@ -22,8 +22,46 @@ interface AppState {
   pattern: Record<InstrumentId, boolean[]>
 }
 
+const STORAGE_KEY = "drumtic-state"
+
+type PersistableState = Omit<
+  AppState,
+  "audioContext" | "startTime" | "currentStep" | "isPlaying"
+>
+
+const loadStateFromStorage = (): Partial<AppState> => {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY)
+    if (stored) {
+      const parsed = JSON.parse(stored) as PersistableState
+      return {
+        ...parsed,
+        audioContext: null,
+        startTime: null,
+        currentStep: 0,
+        isPlaying: false,
+      }
+    }
+  } catch (error) {
+    console.warn("Failed to load state from localStorage:", error)
+  }
+  return {}
+}
+
+const saveStateToStorage = (state: AppState) => {
+  try {
+    const toSave: PersistableState = {
+      activePad: state.activePad,
+      pattern: state.pattern,
+    }
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(toSave))
+  } catch (error) {
+    console.warn("Failed to save state to localStorage:", error)
+  }
+}
+
 function createStateStore() {
-  const [state, setState] = createStore<AppState>({
+  const defaultState: AppState = {
     activePad: "kick",
     isPlaying: false,
     audioContext: null,
@@ -35,7 +73,10 @@ function createStateStore() {
       hihat: Array(16).fill(false),
       glitch: Array(16).fill(false),
     },
-  })
+  }
+
+  const initialState = { ...defaultState, ...loadStateFromStorage() }
+  const [state, setState] = createStore<AppState>(initialState)
 
   const calculateCurrentStep = (
     currentTime: number,
@@ -79,11 +120,20 @@ function createStateStore() {
     setState("pattern", state.activePad, stepIndex, prev => !prev)
   }
 
+  const createManagedPlayFunction = (
+    playFunc: (audioContext: AudioContext | null) => void,
+  ) => {
+    return () => {
+      initializeAudioContext()
+      playFunc(state.audioContext)
+    }
+  }
+
   const playFunctions = {
-    kick: playKick,
-    snare: playSnare,
-    hihat: playHihat,
-    glitch: playGlitch,
+    kick: createManagedPlayFunction(playKick),
+    snare: createManagedPlayFunction(playSnare),
+    hihat: createManagedPlayFunction(playHihat),
+    glitch: createManagedPlayFunction(playGlitch),
   }
 
   createEffect(prev => {
@@ -110,12 +160,16 @@ function createStateStore() {
     if (isPlaying && prev !== undefined && prev !== currentStep) {
       Object.entries(state.pattern).forEach(([instrument, pattern]) => {
         if (pattern[currentStep]) {
-          playFunctions[instrument as InstrumentId](state.audioContext)
+          playFunctions[instrument as InstrumentId]()
         }
       })
     }
 
     return currentStep
+  })
+
+  createEffect(() => {
+    saveStateToStorage(state)
   })
 
   return {
@@ -124,6 +178,7 @@ function createStateStore() {
     initializeAudioContext,
     selectInstrument,
     toggleStep,
+    playFunctions,
   }
 }
 

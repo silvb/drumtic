@@ -27,8 +27,8 @@ export const playSnare: PlayFunc = audioContext => {
 
   // Configure carrier (body frequency)
   carrier.type = "sine"
-  carrier.frequency.setValueAtTime(200, now)
-  carrier.frequency.exponentialRampToValueAtTime(180, now + 0.02) // Brief downward sweep
+  carrier.frequency.setValueAtTime(350, now)
+  carrier.frequency.exponentialRampToValueAtTime(250, now + 0.02) // Brief downward sweep
 
   // Configure modulator (inharmonic ratio 2.3:1 for metallic clang)
   modulator.type = "sine"

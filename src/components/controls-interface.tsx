@@ -1,9 +1,5 @@
 import { type Component, For, onMount, Show } from "solid-js"
 import { useAppState } from "../App"
-import { playGlitch } from "../utils/play-glitch"
-import { playHihat } from "../utils/play-hihat"
-import { playKick } from "../utils/play-kick"
-import { playSnare } from "../utils/play-snare"
 import { DrumPad } from "./drum-pad"
 import { GlitchIcon } from "./glitch-icon"
 import { HihatIcon } from "./hihat-icon"
@@ -14,7 +10,7 @@ import { SnareIcon } from "./snare-icon"
 import { StepPad } from "./step-pad"
 
 export const ControlsInterface: Component = () => {
-  const { state, toggleIsPlaying } = useAppState()
+  const { state, toggleIsPlaying, playFunctions } = useAppState()
   const setAudioSession = () => {
     // Set audio session to playback mode for iOS silent mode compatibility
     try {
@@ -66,19 +62,23 @@ export const ControlsInterface: Component = () => {
   window.addEventListener("keydown", e => {
     switch (e.key) {
       case "a": {
-        playKick(state.audioContext)
+        playFunctions.kick()
         break
       }
       case "s": {
-        playSnare(state.audioContext)
+        playFunctions.snare()
         break
       }
       case "h": {
-        playHihat(state.audioContext)
+        playFunctions.hihat()
         break
       }
       case "j": {
-        playGlitch(state.audioContext)
+        playFunctions.glitch()
+        break
+      }
+      case " ": {
+        toggleIsPlaying()
         break
       }
     }
@@ -97,22 +97,10 @@ export const ControlsInterface: Component = () => {
         </button>
       </div>
       <div class="flex items-center justify-center gap-1">
-        <DrumPad instrumentId="kick" playFunc={playKick} icon={<KickIcon />} />
-        <DrumPad
-          instrumentId="snare"
-          playFunc={playSnare}
-          icon={<SnareIcon />}
-        />
-        <DrumPad
-          instrumentId="hihat"
-          playFunc={playHihat}
-          icon={<HihatIcon />}
-        />
-        <DrumPad
-          instrumentId="glitch"
-          playFunc={playGlitch}
-          icon={<GlitchIcon />}
-        />
+        <DrumPad instrumentId="kick" icon={<KickIcon />} />
+        <DrumPad instrumentId="snare" icon={<SnareIcon />} />
+        <DrumPad instrumentId="hihat" icon={<HihatIcon />} />
+        <DrumPad instrumentId="glitch" icon={<GlitchIcon />} />
       </div>
 
       <div class="mx-auto grid w-auto grid-cols-8 grid-rows-2 gap-1">
