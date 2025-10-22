@@ -1,4 +1,4 @@
-import { type Component, For, onMount } from "solid-js"
+import { type Component, For, onMount, Show } from "solid-js"
 import { useAppState } from "../App"
 import { playGlitch } from "../utils/play-glitch"
 import { playHihat } from "../utils/play-hihat"
@@ -8,6 +8,7 @@ import { DrumPad } from "./drum-pad"
 import { GlitchIcon } from "./glitch-icon"
 import { HihatIcon } from "./hihat-icon"
 import { KickIcon } from "./kick-icon"
+import { PauseIcon } from "./pause-icon"
 import { PlayIcon } from "./play-icon"
 import { SnareIcon } from "./snare-icon"
 import { StepPad } from "./step-pad"
@@ -90,7 +91,9 @@ export const ControlsInterface: Component = () => {
           class="btn btn-outline btn-xl border-2"
           onClick={() => toggleIsPlaying()}
         >
-          <PlayIcon />
+          <Show when={state.isPlaying} fallback={<PlayIcon />}>
+            <PauseIcon />
+          </Show>
         </button>
       </div>
       <div class="flex items-center justify-center gap-1">
@@ -114,7 +117,12 @@ export const ControlsInterface: Component = () => {
 
       <div class="mx-auto grid w-auto grid-cols-8 grid-rows-2 gap-1">
         <For each={Array.from({ length: 16 })}>
-          {(_item, index) => <StepPad step={index() + 1} />}
+          {(_item, index) => (
+            <StepPad
+              step={index() + 1}
+              isActive={state.isPlaying && state.currentStep === index()}
+            />
+          )}
         </For>
       </div>
     </div>

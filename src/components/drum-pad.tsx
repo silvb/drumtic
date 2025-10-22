@@ -9,12 +9,13 @@ interface DrumPadProps {
 }
 
 export function DrumPad(props: DrumPadProps) {
-  const { state } = useAppState()
+  const { state, selectInstrument } = useAppState()
   const isTouchDevice = "ontouchstart" in window || navigator.maxTouchPoints > 0
 
   const trigPlay = (e: TouchEvent | MouseEvent) => {
     e.preventDefault()
     props.playFunc(state.audioContext)
+    selectInstrument(props.instrumentId)
   }
 
   return (
@@ -22,6 +23,9 @@ export function DrumPad(props: DrumPadProps) {
       type="button"
       data-instrument-id={props.instrumentId}
       class="btn btn-primary btn-square h-20 flex-grow select-none"
+      classList={{
+        "outline-2 outline-red-500": state.activePad === props.instrumentId,
+      }}
       onTouchStart={isTouchDevice ? trigPlay : undefined}
       onMouseDown={!isTouchDevice ? trigPlay : undefined}
     >
