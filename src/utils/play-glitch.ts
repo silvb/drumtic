@@ -234,4 +234,26 @@ export const playGlitch: PlayFunc = audioContext => {
     0.001,
     now + 0.1 * lengthVariation,
   )
+
+  // Cleanup all nodes after decay
+  const maxDecayTime = Math.max(0.1 * lengthVariation, noiseLength, 0.025)
+  setTimeout(() => {
+    try {
+      masterGain.disconnect()
+      saturation.disconnect()
+      highpass.disconnect()
+      characterFilter.disconnect()
+      genesisFilter.disconnect()
+      fmGain.disconnect()
+      fmBitCrusher.disconnect()
+      clickGain.disconnect()
+      clickBitCrusher.disconnect()
+      noiseGain.disconnect()
+      noiseBandpass.disconnect()
+      noiseBitCrusher.disconnect()
+      subGain.disconnect()
+    } catch (e) {
+      // Nodes may already be garbage collected
+    }
+  }, (maxDecayTime + 0.1) * 1000)
 }

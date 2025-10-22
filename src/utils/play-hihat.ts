@@ -121,11 +121,10 @@ export const playHihat: PlayFunc = audioContext => {
   highCut.Q.setValueAtTime(0.7, now)
 
   // Connect vintage filtering to master
+  masterGain.disconnect()
   masterGain.connect(vintageFilter)
   vintageFilter.connect(highCut)
-  highCut.disconnect()
   highCut.connect(audioContext.destination)
-  masterGain.disconnect()
 
   // Darker noise component (2-6kHz bandpass, less hissy)
   const bufferSize = audioContext.sampleRate * decay
@@ -173,4 +172,19 @@ export const playHihat: PlayFunc = audioContext => {
   const masterLevel = 0.5 + Math.random() * 0.2 // 0.5-0.7 level variation
   masterGain.gain.setValueAtTime(masterLevel, now)
   masterGain.gain.exponentialRampToValueAtTime(0.001, now + decay)
+
+  // Cleanup all nodes after decay
+  setTimeout(() => {
+    try {
+      masterGain.disconnect()
+      saturation.disconnect()
+      vintageFilter.disconnect()
+      highCut.disconnect()
+      noise.disconnect()
+      noiseBandpass.disconnect()
+      noiseGain.disconnect()
+    } catch (e) {
+      // Nodes may already be garbage collected
+    }
+  }, (decay + 0.1) * 1000)
 }

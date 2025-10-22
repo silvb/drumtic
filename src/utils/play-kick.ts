@@ -53,4 +53,17 @@ export const playKick: PlayFunc = audioContext => {
   carrier.stop(now + decay)
   modulator.start(now)
   modulator.stop(now + decay)
+
+  // Cleanup nodes after decay
+  setTimeout(() => {
+    try {
+      modulator.disconnect()
+      modulatorGain.disconnect()
+      carrier.disconnect()
+      gainNode.disconnect()
+      saturation.disconnect()
+    } catch (e) {
+      // Nodes may already be garbage collected
+    }
+  }, (decay + 0.1) * 1000)
 }

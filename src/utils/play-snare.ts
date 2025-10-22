@@ -6,7 +6,7 @@ export const playSnare: PlayFunc = audioContext => {
     audioContext = new AudioContext()
   }
 
-  const _decay = 0.15
+  const decay = 0.15
   const bodyDecay = 0.12
 
   const now = audioContext.currentTime
@@ -80,4 +80,23 @@ export const playSnare: PlayFunc = audioContext => {
 
   noise.start(now)
   noise.stop(now + 0.15)
+
+  // Cleanup nodes after decay
+  setTimeout(
+    () => {
+      try {
+        modulator.disconnect()
+        modulatorGain.disconnect()
+        carrier.disconnect()
+        bodyGain.disconnect()
+        noise.disconnect()
+        noiseFilter.disconnect()
+        noiseGain.disconnect()
+        saturation.disconnect()
+      } catch (e) {
+        // Nodes may already be garbage collected
+      }
+    },
+    (decay + 0.1) * 1000,
+  )
 }
