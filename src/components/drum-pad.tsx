@@ -28,9 +28,9 @@ export function DrumPad(props: DrumPadProps) {
   return (
     <button
       type="button"
-      class="btn btn-primary btn-square h-20 flex-grow select-none outline-offset-0 transition-colors ease-in-out"
+      class="btn btn-primary btn-square h-20 flex-grow select-none border-none transition-colors ease-in-out"
       classList={{
-        "outline-3 outline-accent": state.activePad === props.instrumentId,
+        "pad-active": state.activePad === props.instrumentId,
         "bg-red-300":
           (state.pattern[props.instrumentId][state.currentStep] &&
             state.isPlaying) ||

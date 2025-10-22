@@ -42,3 +42,9 @@ html,
 body {
   @apply touch-manipulation select-none;
 }
+
+@layer utilities {
+  .pad-active {
+    @apply outline-3 outline-offset-0 outline-red-300;
+  }
+}

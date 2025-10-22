@@ -12,10 +12,10 @@ export function StepPad(props: StepPadProps) {
   return (
     <button
       type="button"
-      class="btn btn-outline border-2"
+      class="btn btn-outline border-2 border-secondary hover:bg-red-300"
       classList={{
-        "btn-accent outline-2 outline-black outline-offset-0": props.isActive,
-        "btn-secondary": !props.isActive && props.hasPattern,
+        "pad-active": props.isActive,
+        "bg-red-300": props.hasPattern,
       }}
       onClick={() => {
         toggleStep(props.step - 1)

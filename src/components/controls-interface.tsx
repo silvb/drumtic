@@ -88,7 +88,7 @@ export const ControlsInterface: Component = () => {
       <div>
         <input
           type="number"
-          class="input input-primary input-xl border-2"
+          class="input input-xl border-2 focus-within:border-secondary focus-within:outline-red-300"
           min="1"
           max="400"
           title="Beats per Minute"
