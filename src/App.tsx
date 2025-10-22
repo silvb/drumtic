@@ -8,6 +8,10 @@ import {
 import { createStore } from "solid-js/store"
 import { ControlsInterface } from "./components/controls-interface"
 import type { InstrumentId } from "./types"
+import { playGlitch } from "./utils/play-glitch"
+import { playHihat } from "./utils/play-hihat"
+import { playKick } from "./utils/play-kick"
+import { playSnare } from "./utils/play-snare"
 
 interface AppState {
   activePad: InstrumentId
@@ -75,6 +79,13 @@ function createStateStore() {
     setState("pattern", state.activePad, stepIndex, prev => !prev)
   }
 
+  const playFunctions = {
+    kick: playKick,
+    snare: playSnare,
+    hihat: playHihat,
+    glitch: playGlitch,
+  }
+
   createEffect(prev => {
     const isPlaying = state.isPlaying
     if (prev !== undefined && prev !== isPlaying) {
@@ -90,6 +101,21 @@ function createStateStore() {
       }
     }
     return isPlaying
+  })
+
+  createEffect(prev => {
+    const currentStep = state.currentStep
+    const isPlaying = state.isPlaying
+
+    if (isPlaying && prev !== undefined && prev !== currentStep) {
+      Object.entries(state.pattern).forEach(([instrument, pattern]) => {
+        if (pattern[currentStep]) {
+          playFunctions[instrument as InstrumentId](state.audioContext)
+        }
+      })
+    }
+
+    return currentStep
   })
 
   return {
