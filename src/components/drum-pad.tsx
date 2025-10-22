@@ -1,19 +1,20 @@
 import type { JSXElement } from "solid-js"
+import { useAppState } from "../App"
 import type { InstrumentId, PlayFunc } from "../types"
 
 interface DrumPadProps {
   instrumentId: InstrumentId
   playFunc: PlayFunc
-  audioContext: AudioContext | null
   icon: JSXElement
 }
 
 export function DrumPad(props: DrumPadProps) {
+  const { state } = useAppState()
   const isTouchDevice = "ontouchstart" in window || navigator.maxTouchPoints > 0
 
   const trigPlay = (e: TouchEvent | MouseEvent) => {
     e.preventDefault()
-    props.playFunc(props.audioContext)
+    props.playFunc(state.audioContext)
   }
 
   return (
