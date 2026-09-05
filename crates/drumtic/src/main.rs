@@ -31,8 +31,6 @@ fn main() {
     let mut engine = Engine::new(sample_rate);
     let mut mono = vec![0.0f32; MAX_FRAMES];
 
-    println!("mono length: {}", mono.len());
-
     let stream = device
         .build_output_stream(
             config,
