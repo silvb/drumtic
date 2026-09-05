@@ -26,6 +26,8 @@ fn main() {
     let channels = config.channels as usize;
     let sample_rate = config.sample_rate;
 
+    println!("sample_rate: {sample_rate}");
+
     let mut engine = Engine::new(sample_rate);
     let mut mono = vec![0.0f32; MAX_FRAMES];
 
@@ -38,6 +40,8 @@ fn main() {
 
                 engine.process(mono);
 
+                // think about this: if `frames` is bigger than `MAX_FRAMES`, we'll get timing
+                // issues. zip silently takes the shorter iterator
                 for (frame, &s) in data.chunks_mut(channels).zip(mono.iter()) {
                     for out in frame.iter_mut() {
                         *out = s;
