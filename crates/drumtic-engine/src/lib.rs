@@ -21,10 +21,10 @@ impl Engine {
         for s in out.iter_mut() {
             *s = (self.phase * TAU).sin() * 0.2;
             self.phase += inc;
-        }
 
-        if self.phase >= 1.0 {
-            self.phase -= 1.0;
+            if self.phase >= 1.0 {
+                self.phase -= 1.0;
+            }
         }
     }
 }
