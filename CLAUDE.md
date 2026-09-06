@@ -36,7 +36,7 @@ cargo clippy --all-targets    # run before calling a slice done
 cargo fmt
 cargo test                    # workspace tests
 cargo test -p drumtic-engine  # engine only
-cargo test -p drumtic-engine env::tests::decays_to_zero   # a single test by path
+cargo test -p drumtic-engine oscillator::tests::produces_sine_at_requested_freq  # one test by path
 ```
 
 `cargo run` opens the default output device and asserts an f32 sample format —
@@ -86,3 +86,13 @@ channel; the roadmap introduces an SPSC ring buffer (`rtrb`) carrying a
   carrier's *phase* before the sine, never to its frequency.
 - DSP tests assert properties (the envelope reaches zero, the transport hits a
   step at the expected sample, a pattern round-trips), never exact sample bytes.
+- Names are spelled out, not abbreviated. `oscillator.rs`/`Oscillator`, not
+  `osc.rs`/`Osc`; `envelope.rs`/`Envelope`, not `env.rs`/`Env`. Rust and DSP
+  code abbreviates heavily by habit; this repo doesn't. Exception: terms that
+  are genuinely the domain's own (`freq`, `phase`, `TAU`). This applies to
+  mentor briefs too — write the descriptive name rather than copying an
+  abbreviation out of the roadmap.
+- Phase is stored in **radians** (`phase_inc = TAU * freq / sample_rate`, wrap
+  at `TAU`), and the FM modulation index is in radians of peak phase
+  deviation, matching the literature. Changed in slice 1.2; see `PROGRESS.md`
+  for the reasoning and the precision tradeoff.

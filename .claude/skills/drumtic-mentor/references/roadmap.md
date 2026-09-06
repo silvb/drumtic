@@ -63,7 +63,7 @@ keep humming.
 - An envelope that never quite reaches zero leaves a DC-ish tail. Add a
   threshold below which you snap to `Idle`.
 
-**Where it goes** `drumtic-engine/src/env.rs`, used by `lib.rs`.
+**Where it goes** `drumtic-engine/src/envelope.rs`, used by `lib.rs`.
 
 ### Slice 1.2 — Two-operator FM
 
@@ -74,8 +74,8 @@ tone gets a metallic, bell-like edge you can dial with an index knob.
 timbre, not pitch.
 
 **New Rust ground**
-- Extracting a reusable `Osc` struct — your first real refactor
-- Module system: `mod`, `pub(crate)`, and why `lib.rs` needs `mod osc;`
+- Extracting a reusable `Oscillator` struct — your first real refactor
+- Module system: `mod`, `pub(crate)`, and why `lib.rs` needs `mod oscillator;`
 
 **Watch out for**
 - Phase modulation and frequency modulation are different, and what
@@ -87,7 +87,7 @@ timbre, not pitch.
 - Ratio (modulator freq ÷ carrier freq) wants to be a separate param from
   index. Ratio changes the character, index changes the amount.
 
-**Where it goes** `drumtic-engine/src/osc.rs`.
+**Where it goes** `drumtic-engine/src/oscillator.rs`.
 
 ### Slice 1.3 — Pitch envelope, and it becomes a kick
 
@@ -106,8 +106,8 @@ This is the single thing that turns a tone into a kick drum.
   Slower and it's a tom, much faster and it's a click.
 - Pitch envelope depth in semitones or in Hz? Hz is simpler here, but
   decide and write it down.
-- Two envelopes with independent times means your `Env` needs config, not
-  constants. Good time to introduce an `EnvConfig` or just fields.
+- Two envelopes with independent times means your `Envelope` needs config,
+  not constants. Good time to introduce an `EnvelopeConfig` or just fields.
 
 ### Slice 1.4 — Trigger it from the main thread
 

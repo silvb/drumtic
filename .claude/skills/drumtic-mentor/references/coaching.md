@@ -33,9 +33,9 @@ has read about them and written about forty lines.
 
 **Example of the right density**
 
-> You'll want an `Env` struct in `drumtic-engine/src/env.rs`, holding the
-> current level, a decay coefficient, and a state. State is an enum —
-> `Idle`, `Attack`, `Decay` is enough for now.
+> You'll want an `Envelope` struct in `drumtic-engine/src/envelope.rs`,
+> holding the current level, a decay coefficient, and a state. State is an
+> enum — `Idle`, `Attack`, `Decay` is enough for now.
 >
 > `fn next(&mut self) -> f32` advances one sample and returns the current
 > level. `fn trigger(&mut self)` restarts it.
