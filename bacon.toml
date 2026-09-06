@@ -1,0 +1,3 @@
+# Bare `cargo clippy` skips #[cfg(test)] code entirely, so test-module
+# errors and lints go unseen. Watch --all-targets instead.
+default_job = "clippy-all"
