@@ -35,16 +35,14 @@ fn main() {
         .build_output_stream(
             config,
             move |data: &mut [f32], _: &cpal::OutputCallbackInfo| {
-                let frames = data.len() / channels;
-                let mono = &mut mono[..frames.min(MAX_FRAMES)];
+                for data_slice in data.chunks_mut(mono.len() * channels) {
+                    let frames = data_slice.len() / channels;
+                    let mono = &mut mono[..frames];
 
-                engine.process(mono);
+                    engine.process(mono);
 
-                // think about this: if `frames` is bigger than `MAX_FRAMES`, we'll get timing
-                // issues. zip silently takes the shorter iterator
-                for (frame, &s) in data.chunks_mut(channels).zip(mono.iter()) {
-                    for out in frame.iter_mut() {
-                        *out = s;
+                    for (frame, &s) in data_slice.chunks_mut(channels).zip(mono.iter()) {
+                        frame.fill(s);
                     }
                 }
             },
