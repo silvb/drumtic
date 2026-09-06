@@ -27,7 +27,7 @@ impl Engine {
         let inc = self.freq / self.sample_rate;
 
         for s in out.iter_mut() {
-            *s = (self.phase * TAU).sin() * self.envelope.next() * 0.5;
+            *s = (self.phase * TAU).sin() * self.envelope.tick() * 0.5;
             self.phase += inc;
 
             if self.phase >= 1.0 {

@@ -17,15 +17,19 @@ const DECAY_TARGET_LEVEL: f32 = 1e-3;
 
 impl Envelope {
     pub fn new(attack_secs: f32, decay_secs: f32, sample_rate: f32) -> Self {
+        // zero attack means jump to full amplitude in one sample
+        let attack_inc = if attack_secs == 0.0 {
+            1.0
+        } else {
+            1.0 / (attack_secs * sample_rate)
+        };
+        let decay_coeff = DECAY_TARGET_LEVEL.powf(1.0 / (decay_secs * sample_rate));
+
         Self {
             state: EnvelopeState::Idle,
             level: 0.0,
-            attack_inc: if attack_secs == 0.0 {
-                1.0
-            } else {
-                1.0 / (attack_secs * sample_rate)
-            },
-            decay_coeff: DECAY_TARGET_LEVEL.powf(1.0 / (decay_secs * sample_rate)),
+            attack_inc,
+            decay_coeff,
         }
     }
 
@@ -34,7 +38,7 @@ impl Envelope {
         self.level = 0.0;
     }
 
-    pub fn next(&mut self) -> f32 {
+    pub fn tick(&mut self) -> f32 {
         match self.state {
             EnvelopeState::Idle => 0.0,
             EnvelopeState::Attack => {
